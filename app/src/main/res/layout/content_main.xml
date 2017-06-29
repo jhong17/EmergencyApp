@@ -18,7 +18,7 @@
         android:gravity="center_horizontal"
         android:text="@string/home_title"
         android:textSize="40sp"
-        android:padding="5dp" />
+        android:padding="5dp" /> 
 
     <include layout="@layout/inner_content" />
 
