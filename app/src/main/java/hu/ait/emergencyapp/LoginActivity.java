@@ -79,6 +79,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnSignUp)
     public void signUpClick() {
+
+        //stupid change for committ
+        int asdkjands = 0;
+
         if (!isFormValid()) {
             return;
         }
