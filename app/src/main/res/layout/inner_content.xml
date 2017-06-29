@@ -32,14 +32,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/emergency_contacts_title" />
+                android:textSize="15sp"
+                android:text="" />
 
             <TextView
                 android:id="@+id/contactInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/emergency_contacts" />
+                android:text="" />
 
         </LinearLayout>
 

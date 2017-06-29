@@ -10,6 +10,7 @@
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="5dp"
     android:layout_margin="10dp"
+    android:padding="5dp"
     tools:showIn="@layout/content_main">
 
     <LinearLayout
@@ -18,6 +19,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/newsTitle"
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
