@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,17 +81,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.search) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.favorites) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.map) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.about) {
 
-        } else if (id == R.id.nav_send) {
+            Toast.makeText(this, "Created by Jessica Hong and Sooyoung Kim", Toast.LENGTH_LONG).show();
+
+        } else if (id == R.id.logout) {
 
         }
 
