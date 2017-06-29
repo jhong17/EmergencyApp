@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //stupid change for committ
         int asdkjands = 0;
+        int asasd = 0;
 
         if (!isFormValid()) {
             return;
