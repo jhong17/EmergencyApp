@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showSpinnerDialog() {
 
-        //i
+        //
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Choose a City");
