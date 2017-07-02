@@ -1,8 +1,12 @@
 package hu.ait.emergencyapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import hu.ait.emergencyapp.adapter.NewsAdapter;
@@ -62,6 +67,33 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void showSpinnerDialog() {
+
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle("Choose a City");
+        String[] types = {"Budapest", "London", "Paris", "Boston"};
+        b.setItems(types, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+                switch(which){
+                    case 0:
+                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
+                        break;
+                    case 1:
+                        Toast.makeText(MainActivity.this, "LONDON", Toast.LENGTH_LONG).show();
+                        break;
+                    case 2:
+                        Toast.makeText(MainActivity.this, "PARIS", Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        });
+        b.show();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -101,16 +133,22 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.home) {
-            // Handle the camera action
+
         } else if (id == R.id.search) {
 
+            showSpinnerDialog();
+
         } else if (id == R.id.favorites) {
+
+            Intent intentMainActivity = new Intent();
+            intentMainActivity.setClass(MainActivity.this, FavoritedActivity.class);
+            startActivity(intentMainActivity);
 
         } else if (id == R.id.map) {
 
         } else if (id == R.id.about) {
 
-            Toast.makeText(this, "Created by Jessica Hong and Sooyoung Kim", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Created by JHong and Soo", Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.logout) {
 
