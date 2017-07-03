@@ -4,6 +4,7 @@ import android.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +17,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,6 +49,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import hu.ait.emergencyapp.adapter.NewsAdapter;
 import hu.ait.emergencyapp.data.City;
 
@@ -54,12 +59,20 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         MyLocationMonitor.MyLocationListener{
 
+    public static final String KEY_CITY_NAME = "KEY_CITY_NAME";
+    @BindView(R.id.contactInfo)
+    TextView contactInfo;
+    @BindView(R.id.contactInfoTitle)
+    TextView contactInfoTitle;
+    @BindView(R.id.cityTitle)
+    TextView cityTitle;
+    @BindView(R.id.newsTitle)
+    TextView newsTitle;
+    @BindView(R.id.contactInfoCard)
+    CardView contactInfoCard;
+
     protected DrawerLayout drawer;
     private NewsAdapter newsAdapter;
-    private TextView cityTitle;
-    private TextView contactInfoTitle;
-    private TextView contactInfo;
-    private TextView newsTitle;
     private MyLocationMonitor myLocationMonitor;
     private String cityName;
     private Typeface font;
@@ -69,15 +82,13 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        contactInfo = (TextView) findViewById(R.id.contactInfo);
-        contactInfoTitle = (TextView) findViewById(R.id.contactInfoTitle);
-        cityTitle = (TextView) findViewById(R.id.cityTitle);
-        newsTitle = (TextView) findViewById(R.id.newsTitle);
         font = Typeface.createFromAsset(getAssets(), "fonts/SEASRN__.ttf");
         cityTitle.setTypeface(font);
-        font = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
+        font = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Bold.ttf");
         contactInfoTitle.setTypeface(font);
+        contactInfoTitle.setPaintFlags(contactInfoTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         newsTitle.setTypeface(font);
 
         myLocationMonitor = new MyLocationMonitor(this, this);
@@ -85,6 +96,16 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        contactInfoCard.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent infoActivity = new Intent(MainActivity.this, InfoActivity.class);
+                infoActivity.putExtra(KEY_CITY_NAME, cityName);
+                startActivity(infoActivity);
+            }
+        });
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -134,8 +155,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
-                    City city = citySnapshot.getValue(City.class);
-                    if(city.getName().equals(cityName)){
+
+                    if(citySnapshot.getKey().equals(cityName.toLowerCase())){
+                        City city = citySnapshot.getValue(City.class);
                         cityTitle.setText(cityName);
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
                         "\nPolice: " + city.getPoliceNumber());

@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.btnSignUp)
     public void signUpClick() {
 
-        //stupid change for committ
+        //stupid change for commit
         int asdkjands = 0;
         int asasd = 0;
 
