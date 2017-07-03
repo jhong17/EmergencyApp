@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_help"
-        android:title="Help"
-        android:icon="@drawable/ic_star_border"
+        android:id="@+id/fav"
+        android:title="Fav"
+        android:icon="@drawable/not_fave"
         app:showAsAction="always"/>
 
 </menu>

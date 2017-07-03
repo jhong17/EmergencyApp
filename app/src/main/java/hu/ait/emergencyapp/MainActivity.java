@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -305,6 +306,12 @@ public class MainActivity extends AppCompatActivity
         //getMenuInflater().inflate(R.menu.main, menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+//        MenuItem item = menu.findItem(R.id.fav);
+//        if (item != null) {
+//            item.setIcon(R.drawable.fave);
+//        }
+
         return true;
     }
 
@@ -316,7 +323,22 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_help) {
+        if (id == R.id.fav) {
+
+            Log.d("TAG", "" + item.getIcon().getConstantState());
+
+            if (item.getIcon().getConstantState().equals(
+                    getResources().getDrawable(R.drawable.not_fave).getConstantState()
+            )) {
+
+                Toast.makeText(this, "MADEE ITTT", Toast.LENGTH_SHORT).show();
+            }
+
+//            if (item.getIcon().equals(R.drawable.not_fave)) {
+//
+//                Toast.makeText(this, "MADEE ITTT", Toast.LENGTH_SHORT).show();
+//
+//            }
             Toast.makeText(this, "HIIII", Toast.LENGTH_SHORT).show();
             return true;
         }
