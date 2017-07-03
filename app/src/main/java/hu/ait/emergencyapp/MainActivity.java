@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity
 
 
         final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
-                getReference("cities");
+                getReference("cities"); 
 
         citiesRef.addValueEventListener(new ValueEventListener() {
             @Override
