@@ -34,10 +34,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View todoRow = LayoutInflater.from(parent.getContext()).inflate(
+        View newsRow = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.news_row, parent, false);
 
-        return new ViewHolder(todoRow);
+        return new ViewHolder(newsRow);
     }
 
     @Override

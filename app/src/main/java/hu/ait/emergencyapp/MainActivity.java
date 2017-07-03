@@ -38,6 +38,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
 
-                    if(citySnapshot.getKey().equals(cityName.toLowerCase())){
+                    if(citySnapshot.getKey().trim().equals(cityName.toLowerCase().trim())){
                         City city = citySnapshot.getValue(City.class);
                         cityTitle.setText(cityName);
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
@@ -185,6 +188,17 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+        contactInfoCard.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent infoActivity = new Intent(MainActivity.this, InfoActivity.class);
+                infoActivity.putExtra(KEY_CITY_NAME, cityName);
+                startActivity(infoActivity);
+            }
+        });
+
+
 
     }
 
@@ -328,17 +342,17 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.fav) {
 
             if (item.getIcon().getConstantState().equals(
-                    getResources().getDrawable(R.drawable.not_fave).getConstantState()
+                    getResources().getDrawable(R.drawable.ic_star_border).getConstantState()
             )) {
 
-                item.setIcon(R.drawable.fave);
+                item.setIcon(R.drawable.ic_star_border);
                 favorites.add(cityName);
 
             } else if (item.getIcon().getConstantState().equals(
-                    getResources().getDrawable(R.drawable.fave).getConstantState()
+                    getResources().getDrawable(R.drawable.ic_star_border).getConstantState()
             )) {
 
-                item.setIcon(R.drawable.not_fave);
+                item.setIcon(R.drawable.ic_star_border);
                 favorites.remove(cityName);
             }
 
@@ -400,13 +414,12 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
-            Log.e("TAG_",
+            Log.d("TAG_",
                     "Latitude = " + location.getLatitude() +
                     ", Longitude = " +
                     location.getLongitude(), illegalArgumentException);
         }
 
-        Log.d("TAG_", cityName);
 
 
         final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
@@ -416,8 +429,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
-                    City city = citySnapshot.getValue(City.class);
-                    if(city.getName().equals(cityName)){
+                    if(citySnapshot.getKey().trim().equals(cityName.toLowerCase().trim())){
+                        City city = citySnapshot.getValue(City.class);
+                        cityTitle.setText(cityName.trim());
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
                                 "\nPolice: " + city.getPoliceNumber());
                     }

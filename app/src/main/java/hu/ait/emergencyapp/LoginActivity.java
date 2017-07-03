@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
 
-//                    Toast.makeText(LoginActivity.this, "Not successs: "+
+//                    Toast.makeText(LoginActivity.this, "Not success: "+
 //                            task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
 
