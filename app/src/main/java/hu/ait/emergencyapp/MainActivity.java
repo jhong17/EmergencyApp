@@ -1,15 +1,24 @@
 package hu.ait.emergencyapp;
 
+import android.*;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,15 +43,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
 import hu.ait.emergencyapp.adapter.NewsAdapter;
 import hu.ait.emergencyapp.data.City;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MyLocationMonitor.MyLocationListener{
 
     protected DrawerLayout drawer;
     private NewsAdapter newsAdapter;
+    private TextView cityTitle;
+    private TextView contactInfoTitle;
     private TextView contactInfo;
+    private TextView newsTitle;
+    private MyLocationMonitor myLocationMonitor;
+    private String cityName;
+    private Typeface font;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +71,29 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         contactInfo = (TextView) findViewById(R.id.contactInfo);
+        contactInfoTitle = (TextView) findViewById(R.id.contactInfoTitle);
+        cityTitle = (TextView) findViewById(R.id.cityTitle);
+        newsTitle = (TextView) findViewById(R.id.newsTitle);
+        font = Typeface.createFromAsset(getAssets(), "fonts/SEASRN__.ttf");
+        cityTitle.setTypeface(font);
+        font = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
+        contactInfoTitle.setTypeface(font);
+        newsTitle.setTypeface(font);
+
+        myLocationMonitor = new MyLocationMonitor(this, this);
+        requestNeededPermission();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,7 +115,17 @@ public class MainActivity extends AppCompatActivity
         newsAdapter = new NewsAdapter();
         newsRecycler.setAdapter(newsAdapter);
 
-        final String cityName = "Budapest";
+        cityName = "London";
+
+//        City city = new City("Budapest", "107", "105");
+//
+//        String key = FirebaseDatabase.getInstance().getReference().
+//                child("cities").push().getKey();
+//
+//        FirebaseDatabase.getInstance().getReference().
+//                child("cities").child("budapest").setValue(city);
+
+
 
         final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
                 getReference("cities");
@@ -94,6 +136,7 @@ public class MainActivity extends AppCompatActivity
                 for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
                     City city = citySnapshot.getValue(City.class);
                     if(city.getName().equals(cityName)){
+                        cityTitle.setText(cityName);
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
                         "\nPolice: " + city.getPoliceNumber());
                     }
@@ -109,13 +152,39 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    }
 
+    private void requestNeededPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Toast...
+            }
 
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1001);
+        } else {
+            // we already have the permission
+            myLocationMonitor.startLocationMonitoring();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1001) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(this, "Permission granted, jupeee!", Toast.LENGTH_SHORT).show();
+
+                myLocationMonitor.startLocationMonitoring();
+
+            } else {
+                Toast.makeText(this, "Permission not granted :(", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void showSpinnerDialog() {
-
-        //s
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Choose a City");
@@ -201,5 +270,63 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void newLocationReceived(Location location) {
+
+        Geocoder geocoder = new Geocoder(MainActivity.this);
+        List<Address> addressList = null;
+        cityName = "test";
+
+        try {
+            addressList = geocoder.getFromLocation(
+                    location.getLatitude(),
+                    location.getLongitude(),
+                    1);
+            cityName = addressList.get(0).getAddressLine(0) + "\n";
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e("TAG_",
+                    "Latitude = " + location.getLatitude() +
+                    ", Longitude = " +
+                    location.getLongitude(), illegalArgumentException);
+        }
+
+        Log.d("TAG_", cityName);
+
+
+        final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
+                getReference("cities");
+
+        citiesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
+                    City city = citySnapshot.getValue(City.class);
+                    if(city.getName().equals(cityName)){
+                        contactInfo.setText("Fire service: " + city.getFireNumber() +
+                                "\nPolice: " + city.getPoliceNumber());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        myLocationMonitor.stopLocationMonitoring();
+        super.onDestroy();
     }
 }
