@@ -21,4 +21,5 @@
         completions."
     </string>
     <string name="empty_string">This field cannot be empty</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

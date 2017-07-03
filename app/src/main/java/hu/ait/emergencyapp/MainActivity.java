@@ -256,6 +256,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                //cityName = autoTV.getText().toString();
+                getTempIcon(autoTV.getText().toString());
                 //cityRecyclerAdapter.addCity(etTodo.getText().toString());
 
             }
@@ -323,6 +325,12 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
+        if (favorites.contains(cityName)) {
+            menu.getItem(0).setIcon(R.drawable.fave);
+        } else {
+            menu.getItem(0).setIcon(R.drawable.not_fave);
+        }
+
 //        MenuItem item = menu.findItem(R.id.fav);
 //        if (item != null) {
 //            item.setIcon(R.drawable.fave);
@@ -379,6 +387,10 @@ public class MainActivity extends AppCompatActivity
             showFavoriteDialog();
 
         } else if (id == R.id.map) {
+
+            Intent mapsActivity = new Intent();
+            mapsActivity.setClass(MainActivity.this, MapsActivity.class);
+            startActivity(mapsActivity);
 
         } else if (id == R.id.about) {
 
