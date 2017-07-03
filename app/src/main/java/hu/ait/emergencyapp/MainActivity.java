@@ -46,11 +46,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity
 
     protected DrawerLayout drawer;
     private NewsAdapter newsAdapter;
-    public List<String> favorites = new ArrayList<>();
+    public Set<String> favorites = new HashSet<>();
     private MyLocationMonitor myLocationMonitor;
     private String cityName;
     private Typeface font;
@@ -325,21 +327,21 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.fav) {
 
-            Log.d("TAG", "" + item.getIcon().getConstantState());
-
             if (item.getIcon().getConstantState().equals(
                     getResources().getDrawable(R.drawable.not_fave).getConstantState()
             )) {
 
-                Toast.makeText(this, "MADEE ITTT", Toast.LENGTH_SHORT).show();
+                item.setIcon(R.drawable.fave);
+                favorites.add(cityName);
+
+            } else if (item.getIcon().getConstantState().equals(
+                    getResources().getDrawable(R.drawable.fave).getConstantState()
+            )) {
+
+                item.setIcon(R.drawable.not_fave);
+                favorites.remove(cityName);
             }
 
-//            if (item.getIcon().equals(R.drawable.not_fave)) {
-//
-//                Toast.makeText(this, "MADEE ITTT", Toast.LENGTH_SHORT).show();
-//
-//            }
-            Toast.makeText(this, "HIIII", Toast.LENGTH_SHORT).show();
             return true;
         }
 
