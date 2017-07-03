@@ -8,17 +8,19 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="hu.ait.emergencyapp.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="#282828"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/cityTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20sp"
+        android:layout_margin="11dp"
         android:gravity="center_horizontal"
-        android:text="@string/home_title"
-        android:textSize="40sp"
-        android:padding="5dp" />
+        android:text=""
+        android:textColor="#f4f4f4"
+        android:textSize="47sp" />
 
     <include layout="@layout/inner_content" />
 

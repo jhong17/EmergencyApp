@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="#6fc1fc"
+    card_view:cardBackgroundColor="#d7d7d7"
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="5dp"
     android:layout_margin="10dp"
@@ -25,6 +25,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/news_title"
+            android:textColor="#FFFFFF"
+            android:background="#ed4325"
             android:textSize="30sp" />
 
         <android.support.v7.widget.RecyclerView
