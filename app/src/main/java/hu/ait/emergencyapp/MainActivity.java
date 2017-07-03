@@ -350,23 +350,21 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.fav) {
 
             if (item.getIcon().getConstantState().equals(
-                    getResources().getDrawable(R.drawable.ic_star_border).getConstantState()
+                    getResources().getDrawable(R.drawable.not_fave).getConstantState()
             )) {
 
-                item.setIcon(R.drawable.ic_star_border);
+                item.setIcon(R.drawable.fave);
                 favorites.add(cityName);
 
             } else if (item.getIcon().getConstantState().equals(
-                    getResources().getDrawable(R.drawable.ic_star_border).getConstantState()
+                    getResources().getDrawable(R.drawable.fave).getConstantState()
             )) {
 
-                item.setIcon(R.drawable.ic_star_border);
+                item.setIcon(R.drawable.not_fave);
                 favorites.remove(cityName);
             }
-
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
