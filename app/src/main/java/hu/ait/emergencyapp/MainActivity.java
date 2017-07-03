@@ -30,20 +30,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.IOException;
 import java.util.Date;
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity
 
     protected DrawerLayout drawer;
     private NewsAdapter newsAdapter;
+    public List<String> favorites = new ArrayList<>();
     private MyLocationMonitor myLocationMonitor;
     private String cityName;
     private Typeface font;
@@ -172,8 +172,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
     }
 
     private void requestNeededPermission() {
@@ -206,17 +204,64 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void showSpinnerDialog() {
+    private void showSearchDialog() {
+
+        String[] cityNames = new String[] { "Budapest",
+                "Bukarest","Krakkó", "Bécs", "Boston", "London", "Paris", "Seattle", "Austin", "Barcelona",
+                "Amsterdam"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose a City");
+
+        //final EditText etTodo = new EditText(this);
+        final AutoCompleteTextView autoTV = new AutoCompleteTextView(this);
+
+        ArrayAdapter<String> cityAdapter =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.
+                                simple_dropdown_item_1line, cityNames);
+        autoTV.setAdapter(cityAdapter);
+
+        builder.setView(autoTV);
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //cityRecyclerAdapter.addCity(etTodo.getText().toString());
+
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void showFavoriteDialog() {
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle("Choose a City");
-        String[] types = {"Budapest", "London", "Paris", "Boston"};
-        b.setItems(types, new DialogInterface.OnClickListener() {
+        b.setTitle("Favorite Cities");
+
+        final String [] favoritesArray = favorites.toArray(new String[favorites.size()]);
+
+        b.setItems(favoritesArray, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 dialog.dismiss();
+
+                String selected = favoritesArray[which];
+                Log.d("TAG", "selected: " + selected);
+
+                //favorites.add("London");
+
                 switch(which){
                     case 0:
                         Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
@@ -275,9 +320,11 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.search) {
 
-            showSpinnerDialog();
+            showSearchDialog();
 
         } else if (id == R.id.favorites) {
+
+            showFavoriteDialog();
 
         } else if (id == R.id.map) {
 
@@ -287,6 +334,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.logout) {
 
+            Intent loginMainActivity = new Intent();
+            loginMainActivity.setClass(MainActivity.this, LoginActivity.class);
+            startActivity(loginMainActivity);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
