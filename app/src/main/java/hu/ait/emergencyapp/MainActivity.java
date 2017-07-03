@@ -21,6 +21,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,9 +33,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +56,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hu.ait.emergencyapp.adapter.NewsAdapter;
 import hu.ait.emergencyapp.data.City;
+import hu.ait.emergencyapp.data.WeatherResult;
+import hu.ait.emergencyapp.retrofit.WeatherAPI;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -161,6 +171,7 @@ public class MainActivity extends AppCompatActivity
                         cityTitle.setText(cityName);
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
                         "\nPolice: " + city.getPoliceNumber());
+                        getTempIcon(cityName);
                     }
                 }
 
@@ -291,7 +302,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -303,7 +316,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_help) {
+            Toast.makeText(this, "HIIII", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -400,5 +414,47 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         myLocationMonitor.stopLocationMonitoring();
         super.onDestroy();
+    }
+
+    public void getTempIcon(String name) {
+
+        final TextView currentTemp = (TextView) findViewById(R.id.weatherTemp);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
+
+        Call<WeatherResult> cityWeather = weatherAPI.getWeather(name, "metric","79e23c87f571848c7c550e6b937fda62");
+
+        cityWeather.enqueue(new Callback<WeatherResult>() {
+            @Override
+            public void onResponse(Call<WeatherResult> call, Response<WeatherResult> response) {
+
+                WeatherResult weatherResult = response.body();
+
+                if (weatherResult != null) {
+
+                    currentTemp.setText(weatherResult.getMain().getTemp() + "°C");
+
+                    String s = weatherResult.getWeather().get(0).getIcon();
+                    ImageView imageView = (ImageView) findViewById(R.id.weatherIcon);
+                    Glide.with(MainActivity.this).load("http://openweathermap.org/img/w/" + s + ".png").into(imageView);
+
+                } else {
+
+                    Toast.makeText(MainActivity.this, "NOT A VALID CITY", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResult> call, Throwable t) {
+                //minTemp.setText("Error: "+t.getMessage());
+
+            }
+        });
     }
 }
