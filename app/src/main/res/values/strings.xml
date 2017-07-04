@@ -20,7 +20,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="empty_string">This field cannot be empty</string>
+    <string name="empty_string">This field cannot be empty </string>
     <string name="title_activity_maps">Map</string>
     <string name="fontType">fonts/SEASRN__.ttf</string>
     <string name="cities">cities</string>
