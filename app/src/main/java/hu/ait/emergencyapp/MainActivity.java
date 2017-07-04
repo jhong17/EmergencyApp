@@ -262,7 +262,6 @@ public class MainActivity extends AppCompatActivity
                 //cityName = autoTV.getText().toString();
                 getTempIcon(autoTV.getText().toString());
                 //cityRecyclerAdapter.addCity(etTodo.getText().toString());
-
             }
         });
 
