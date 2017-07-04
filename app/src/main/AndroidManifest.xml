@@ -36,6 +36,7 @@
         <activity
             android:name=".InfoActivity"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -51,7 +52,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
