@@ -22,4 +22,37 @@
     </string>
     <string name="empty_string">This field cannot be empty</string>
     <string name="title_activity_maps">Map</string>
+    <string name="fontType">fonts/SEASRN__.ttf</string>
+    <string name="cities">cities</string>
+    <string name="read_failed">The read failed:</string>
+    <string name="user_created">User created</string>
+    <string name="waiting">Wait for it...</string>
+    <string name="font_two">fonts/SEASRN__.ttf</string>
+    <string name="font_three">fonts/Raleway-Bold.ttf</string>
+    <string name="permission">Permission granted, jupeee!</string>
+    <string name="no_permission">Permission not granted :(</string>
+    <string name="cancel">Cancel</string>
+    <string name="about">Created by JHong and Soo</string>
+    <string name="choose_city">Choose a City</string>
+    <string name="ok">Ok</string>
+    <string name="fav_cities">Favorite Cities</string>
+    <string name="test">test</string>
+    <string name="weather_website">http://api.openweathermap.org</string>
+    <string name="metric">metric</string>
+    <string name="weather_api">79e23c87f571848c7c550e6b937fda62</string>
+    <string name="not_valid_city">NOT A VALID CITY</string>
+    <string name="short_weather_website">http://openweathermap.org/img/w/</string>
+    <string name="png">.png</string>
+    <string name="users">users</string>
+    <string name="police">police</string>
+    <string name="nearby_police">Nearby Police</string>
+    <string name="hospital">hospital</string>
+    <string name="nearby_hospitals">Nearby Hospitals</string>
+    <string name="website_maps">https://maps.googleapis.com/maps/api/place/nearbysearch/json?</string>
+    <string name="current_position">Current Position</string>
+    <string name="current_location">Your Current Location</string>
+    <string name="permission_denied">permission denied</string>
+    <string name="contact_info">contact_info</string>
+    <string name="delete">delete</string>
+    <string name="nearby_police_stations">nearpolice</string>
 </resources>

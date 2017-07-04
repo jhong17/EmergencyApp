@@ -57,11 +57,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Check if Google Play Services Available or not
         if (!CheckGooglePlayServices()) {
-            Log.d("onCreate", "Finishing test case since Google Play Services are not available");
             finish();
         }
         else {
-            Log.d("onCreate","Google Play Services available.");
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -83,16 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -114,37 +102,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Button btnPolice = (Button) findViewById(R.id.btnPolice);
         btnPolice.setOnClickListener(new View.OnClickListener() {
-            String Police = "police";
+            String Police = getString(R.string.police);
             @Override
             public void onClick(View v) {
-                Log.d("onClick", "Button is Clicked");
                 mMap.clear();
                 String url = getUrl(latitude, longitude, Police);
                 Object[] DataTransfer = new Object[2];
                 DataTransfer[0] = mMap;
                 DataTransfer[1] = url;
-                Log.d("onClick", url);
                 GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
                 getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsActivity.this,"Nearby Police", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapsActivity.this, R.string.nearby_police, Toast.LENGTH_LONG).show();
             }
         });
 
         Button btnHospital = (Button) findViewById(R.id.btnHospital);
         btnHospital.setOnClickListener(new View.OnClickListener() {
-            String Hospital = "hospital";
+            String Hospital = getString(R.string.hospital);
             @Override
             public void onClick(View v) {
-                Log.d("onClick", "Button is Clicked");
                 mMap.clear();
                 String url = getUrl(latitude, longitude, Hospital);
                 Object[] DataTransfer = new Object[2];
                 DataTransfer[0] = mMap;
                 DataTransfer[1] = url;
-                Log.d("onClick", url);
                 GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
                 getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsActivity.this,"Nearby Hospitals", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapsActivity.this, R.string.nearby_hospitals, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -174,7 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        StringBuilder googlePlacesUrl = new StringBuilder(getString(R.string.website_maps));
         googlePlacesUrl.append("location=" + latitude + "," + longitude);
         googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
         googlePlacesUrl.append("&type=" + nearbyPlace);
@@ -191,7 +175,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("onLocationChanged", "entered");
 
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
@@ -204,23 +187,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Current Position");
+        markerOptions.title(getString(R.string.current_position));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-        Toast.makeText(MapsActivity.this,"Your Current Location", Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, R.string.current_location, Toast.LENGTH_LONG).show();
 
-        Log.d("onLocationChanged", String.format("latitude:%.3f longitude:%.3f",latitude,longitude));
 
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            Log.d("onLocationChanged", "Removing Location Updates");
+
         }
-        Log.d("onLocationChanged", "Exit");
 
     }
 
@@ -285,7 +266,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } else {
 
                     // Permission denied, Disable the functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
                 }
                 return;
             }

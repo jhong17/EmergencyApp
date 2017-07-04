@@ -35,7 +35,7 @@ public class InfoActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        font = Typeface.createFromAsset(getAssets(), "fonts/SEASRN__.ttf");
+        font = Typeface.createFromAsset(getAssets(), getString(R.string.fontType));
         infoTitle.setTypeface(font);
 
         if(getIntent().hasExtra(MainActivity.KEY_CITY_NAME)){
@@ -55,7 +55,7 @@ public class InfoActivity extends AppCompatActivity {
         infoRecycler.setAdapter(infoAdapter);
 
         final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
-                getReference("cities");
+                getReference(getString(R.string.cities));
 
         citiesRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -71,7 +71,7 @@ public class InfoActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                System.out.println(getString(R.string.read_failed) + databaseError.getCode());
             }
         });
 

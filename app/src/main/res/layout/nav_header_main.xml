@@ -19,19 +19,4 @@
         android:layout_height="70dp"
         app:srcCompat="@drawable/logo_only" />
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
-        <!--android:textColor="#000000"-->
-        <!--android:text="Emergency App"-->
-        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/textView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Created by JHong and Soo"-->
-        <!--android:textColor="#3d3d3d"/>-->
-
 </LinearLayout>

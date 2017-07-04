@@ -62,9 +62,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hu.ait.emergencyapp.adapter.NewsAdapter;
+import hu.ait.emergencyapp.data.Article;
+import hu.ait.emergencyapp.data.Article2;
 import hu.ait.emergencyapp.data.City;
 import hu.ait.emergencyapp.data.User;
 import hu.ait.emergencyapp.data.WeatherResult;
+import hu.ait.emergencyapp.retrofit.NewsAPI;
 import hu.ait.emergencyapp.retrofit.WeatherAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity
     private String cityName;
     private Typeface font;
 
+    private List<Article> listOfArticlesOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +106,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        font = Typeface.createFromAsset(getAssets(), "fonts/SEASRN__.ttf");
+        listOfArticlesOnline = new ArrayList<>();
+
+        font = Typeface.createFromAsset(getAssets(), getString(R.string.font_two));
         cityTitle.setTypeface(font);
-        font = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Bold.ttf");
+        font = Typeface.createFromAsset(getAssets(), getString(R.string.font_three));
         contactInfoTitle.setTypeface(font);
         contactInfoTitle.setPaintFlags(contactInfoTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         newsTitle.setTypeface(font);
@@ -176,12 +182,12 @@ public class MainActivity extends AppCompatActivity
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                Toast.makeText(this, "Permission granted, jupeee!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.permission, Toast.LENGTH_SHORT).show();
 
                 myLocationMonitor.startLocationMonitoring();
 
             } else {
-                Toast.makeText(this, "Permission not granted :(", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.no_permission, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -192,7 +198,7 @@ public class MainActivity extends AppCompatActivity
                 "Amsterdam", "Geneva", "Berlin", "Vienna"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose a City");
+        builder.setTitle(R.string.choose_city);
 
         final AutoCompleteTextView autoTV = new AutoCompleteTextView(this);
 
@@ -204,8 +210,9 @@ public class MainActivity extends AppCompatActivity
 
         builder.setView(autoTV);
 
+        //rando
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -217,7 +224,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -230,7 +237,7 @@ public class MainActivity extends AppCompatActivity
     private void showFavoriteDialog() {
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle("Favorite Cities");
+        b.setTitle(R.string.fav_cities);
 
         final String [] favoritesArray = favorites.toArray(new String[favorites.size()]);
 
@@ -242,7 +249,6 @@ public class MainActivity extends AppCompatActivity
                 dialog.dismiss();
 
                 String selectedCity = favoritesArray[which];
-                Log.d("TAG_HI", "selected: " + selectedCity);
 
                 getTempIcon(selectedCity);
                 cityName = selectedCity;
@@ -330,7 +336,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.about) {
 
-            Toast.makeText(this, "Created by JHong and Soo", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.about, Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.logout) {
 
@@ -349,7 +355,7 @@ public class MainActivity extends AppCompatActivity
 
         Geocoder geocoder = new Geocoder(MainActivity.this);
         List<Address> addressList = null;
-        cityName = "test";
+        cityName = getString(R.string.test);
 
         try {
             addressList = geocoder.getFromLocation(
@@ -361,10 +367,7 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException illegalArgumentException) {
-            Log.d("TAG_",
-                    "Latitude = " + location.getLatitude() +
-                    ", Longitude = " +
-                    location.getLongitude(), illegalArgumentException);
+
         }
 
         updateCityInfo();
@@ -449,12 +452,12 @@ public class MainActivity extends AppCompatActivity
         final TextView currentTemp = (TextView) findViewById(R.id.weatherTemp);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org")
+                .baseUrl(getString(R.string.weather_website))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
 
-        Call<WeatherResult> cityWeather = weatherAPI.getWeather(name, "metric","79e23c87f571848c7c550e6b937fda62");
+        Call<WeatherResult> cityWeather = weatherAPI.getWeather(name, getString(R.string.metric),getString(R.string.weather_api));
 
         cityWeather.enqueue(new Callback<WeatherResult>() {
             @Override
@@ -468,11 +471,11 @@ public class MainActivity extends AppCompatActivity
 
                     String s = weatherResult.getWeather().get(0).getIcon();
                     ImageView imageView = (ImageView) findViewById(R.id.weatherIcon);
-                    Glide.with(MainActivity.this).load("http://openweathermap.org/img/w/" + s + ".png").into(imageView);
+                    Glide.with(MainActivity.this).load(getString(R.string.short_weather_website) + s + getString(R.string.png)).into(imageView);
 
                 } else {
 
-                    Toast.makeText(MainActivity.this, "NOT A VALID CITY", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.not_valid_city, Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -491,7 +494,6 @@ public class MainActivity extends AppCompatActivity
                 getReference("users");
 
         final String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("TAG", key);
 
         usersRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -527,7 +529,7 @@ public class MainActivity extends AppCompatActivity
 
 
         for (int i = 0; i < favorites.size(); i++) {
-            FirebaseDatabase.getInstance().getReference().child("users").child(key).child("cities").
+            FirebaseDatabase.getInstance().getReference().child(getString(R.string.users)).child(key).child("cities").
                     setValue(favorites);
         }
 
