@@ -294,9 +294,6 @@ public class MainActivity extends AppCompatActivity
 
                 getTempIcon(selectedCity);
 
-
-                //favorites.add("London");
-
 //                switch(which){
 //                    case 0:
 //                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
