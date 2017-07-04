@@ -18,6 +18,10 @@ public class City  {
     public City() {
     }
 
+    public City(String name){
+        this.name = name;
+    }
+
     public City(String name, String policeNumber, String fireNumber, String ambulanceNumber) {
         this.name = name;
         this.policeNumber = policeNumber;

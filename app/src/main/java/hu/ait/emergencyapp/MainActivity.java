@@ -42,6 +42,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,6 +63,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hu.ait.emergencyapp.adapter.NewsAdapter;
 import hu.ait.emergencyapp.data.City;
+import hu.ait.emergencyapp.data.User;
 import hu.ait.emergencyapp.data.WeatherResult;
 import hu.ait.emergencyapp.retrofit.WeatherAPI;
 import retrofit2.Call;
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
     protected DrawerLayout drawer;
     private NewsAdapter newsAdapter;
-    public Set<String> favorites = new HashSet<>();
+    public List<String> favorites = new ArrayList<>();
     private MyLocationMonitor myLocationMonitor;
     private String cityName;
     private Typeface font;
@@ -109,6 +111,9 @@ public class MainActivity extends AppCompatActivity
 
         myLocationMonitor = new MyLocationMonitor(this, this);
         requestNeededPermission();
+
+        addUser();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -183,9 +188,8 @@ public class MainActivity extends AppCompatActivity
 
     private void showSearchDialog() {
 
-        String[] cityNames = new String[] { "Budapest",
-                "Bukarest","Krakkó", "Bécs", "Boston", "London", "Paris", "Seattle", "Austin", "Barcelona",
-                "Amsterdam, Dallas"};
+        String[] cityNames = new String[] { "Budapest", "London", "Paris", "Barcelona",
+                "Amsterdam", "Geneva", };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose a City");
@@ -285,10 +289,7 @@ public class MainActivity extends AppCompatActivity
             menu.getItem(0).setIcon(R.drawable.not_fave);
         }
 
-//        MenuItem item = menu.findItem(R.id.fav);
-//        if (item != null) {
-//            item.setIcon(R.drawable.fave);
-//        }
+
         return true;
     }
 
@@ -306,6 +307,7 @@ public class MainActivity extends AppCompatActivity
                     getResources().getDrawable(R.drawable.not_fave).getConstantState()
             )) {
 
+                //favorite stuff
                 item.setIcon(R.drawable.fave);
                 favorites.add(cityName);
                 //invalidateOptionsMenu();
@@ -314,6 +316,7 @@ public class MainActivity extends AppCompatActivity
                     getResources().getDrawable(R.drawable.fave).getConstantState()
             )) {
 
+                //unfavorite stuff
                 item.setIcon(R.drawable.not_fave);
                 favorites.remove(cityName);
                 //invalidateOptionsMenu();
@@ -423,6 +426,36 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+        final DatabaseReference usersRef = FirebaseDatabase.getInstance().
+                getReference("users");
+
+        final String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+
+                    if(userSnapshot.getKey().trim().equals(key.trim())){
+                        List<String> list = (List<String>) userSnapshot.child("cities").getValue();
+                        if(list != null) {
+                            favorites = list;
+
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        Log.d("TAG_", favorites.toString());
+
         invalidateOptionsMenu();
     }
 
@@ -472,5 +505,59 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    public void addUser(){
+        final DatabaseReference usersRef = FirebaseDatabase.getInstance().
+                getReference("users");
+
+        final String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("TAG", key);
+
+        usersRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    User user = new User();
+                    FirebaseDatabase.getInstance().getReference().
+                            child("users").child(key).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void addFavorites(){
+
+        final String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+        for (int i = 0; i < favorites.size(); i++) {
+            FirebaseDatabase.getInstance().getReference().child("users").child(key).child("cities").
+                    setValue(favorites);
+        }
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        addFavorites();
+        super.onStop();
     }
 }
