@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity
                         cityTitle.setText(cityName);
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
                         "\nPolice: " + city.getPoliceNumber());
-                        getTempIcon(cityName);
+                        getTempIcon(city.getName());
                     }
                 }
 
@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity
                 dialog.dismiss();
 
                 String selectedCity = favoritesArray[which];
-                Log.d("TAG", "selected: " + selectedCity);
+                Log.d("TAG_HI", "selected: " + selectedCity);
 
                 getTempIcon(selectedCity);
 

@@ -34,7 +34,7 @@ public class MyLocationMonitor implements LocationListener{
         locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         //if using emulator, don't use this - WILL CRASH
-        //locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
 
     }
