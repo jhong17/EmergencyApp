@@ -253,6 +253,8 @@ public class MainActivity extends AppCompatActivity
 
         builder.setView(autoTV);
 
+        //rando
+
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
