@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                 hideProgressDialog();
 
                 if (task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
 
                     FirebaseUser fireBaseUser = task.getResult().getUser();
 

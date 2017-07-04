@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity
     private void showSearchDialog() {
 
         String[] cityNames = new String[] { "Budapest", "London", "Paris", "Barcelona",
-                "Amsterdam", "Geneva", };
+                "Amsterdam", "Geneva", "Berlin", "Vienna"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose a City");
