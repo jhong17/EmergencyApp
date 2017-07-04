@@ -7,10 +7,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hu.ait.emergencyapp.adapter.InfoAdapter;
 import hu.ait.emergencyapp.adapter.NewsAdapter;
+import hu.ait.emergencyapp.data.City;
 
 public class InfoActivity extends AppCompatActivity {
 
@@ -47,5 +54,27 @@ public class InfoActivity extends AppCompatActivity {
         infoAdapter = new InfoAdapter();
         infoRecycler.setAdapter(infoAdapter);
 
-    }
+        final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
+                getReference("cities");
+
+        citiesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                City city;
+                for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
+                    if(citySnapshot.getKey().trim().equals(cityName.toLowerCase().trim())){
+                        city = citySnapshot.getValue(City.class);
+                        infoAdapter.addCityInfo(city);
+                    }
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+        }
 }

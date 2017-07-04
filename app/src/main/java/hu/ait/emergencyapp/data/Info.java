@@ -13,8 +13,7 @@ public class Info {
     public Info() {
     }
 
-    public Info(String cityName, String infoName, String content) {
-        this.cityName = cityName;
+    public Info(String infoName, String content) {
         this.infoName = infoName;
         this.content = content;
     }

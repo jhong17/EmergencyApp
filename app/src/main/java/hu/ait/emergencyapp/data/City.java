@@ -6,17 +6,24 @@ package hu.ait.emergencyapp.data;
 
 public class City  {
 
+    //primary information
     private String name;
     private String policeNumber;
     private String fireNumber;
+    private String ambulanceNumber;
+    private String generalEmergency;
+
+    //secondary information
 
     public City() {
     }
 
-    public City(String name, String policeNumber, String fireNumber) {
+    public City(String name, String policeNumber, String fireNumber, String ambulanceNumber) {
         this.name = name;
         this.policeNumber = policeNumber;
         this.fireNumber = fireNumber;
+        this.ambulanceNumber = ambulanceNumber;
+        this.generalEmergency = null;
     }
 
     public String getName() {
@@ -41,5 +48,21 @@ public class City  {
 
     public void setFireNumber(String fireNumber) {
         this.fireNumber = fireNumber;
+    }
+
+    public String getAmbulanceNumber() {
+        return ambulanceNumber;
+    }
+
+    public void setAmbulanceNumber(String ambulanceNumber) {
+        this.ambulanceNumber = ambulanceNumber;
+    }
+
+    public String getGeneralEmergency() {
+        return generalEmergency;
+    }
+
+    public void setGeneralEmergency(String generalEmergency) {
+        this.generalEmergency = generalEmergency;
     }
 }

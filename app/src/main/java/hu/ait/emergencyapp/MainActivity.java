@@ -113,15 +113,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        contactInfoCard.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent infoActivity = new Intent(MainActivity.this, InfoActivity.class);
-                infoActivity.putExtra(KEY_CITY_NAME, cityName);
-                startActivity(infoActivity);
-            }
-        });
-
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -176,9 +167,16 @@ public class MainActivity extends AppCompatActivity
                     if(citySnapshot.getKey().trim().equals(cityName.toLowerCase().trim())){
                         City city = citySnapshot.getValue(City.class);
                         cityTitle.setText(cityName);
-                        contactInfo.setText("Fire service: " + city.getFireNumber() +
-                        "\nPolice: " + city.getPoliceNumber());
-                        getTempIcon(city.getName());
+                        if(city.getGeneralEmergency() != null) {
+                            contactInfo.setText("General Emergency Number: " +
+                                    city.getGeneralEmergency() + "");
+
+                        } else {
+                            contactInfo.setText("Police: " + city.getPoliceNumber() +
+                                    "\nFire: " + city.getFireNumber() +
+                                    "\nAmbulance: " + city.getAmbulanceNumber());
+                        }
+                        getTempIcon(cityName);
                     }
                 }
 
@@ -237,7 +235,7 @@ public class MainActivity extends AppCompatActivity
 
         String[] cityNames = new String[] { "Budapest",
                 "Bukarest","Krakkó", "Bécs", "Boston", "London", "Paris", "Seattle", "Austin", "Barcelona",
-                "Amsterdam"};
+                "Amsterdam, Dallas"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose a City");

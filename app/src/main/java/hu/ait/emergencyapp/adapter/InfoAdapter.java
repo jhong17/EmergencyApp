@@ -1,5 +1,6 @@
 package hu.ait.emergencyapp.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import hu.ait.emergencyapp.R;
 import hu.ait.emergencyapp.data.Article;
+import hu.ait.emergencyapp.data.City;
 import hu.ait.emergencyapp.data.Info;
 
 /**
@@ -20,13 +22,10 @@ import hu.ait.emergencyapp.data.Info;
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ViewHolder> {
 
     private List<Info> infoList;
+    private boolean colorOne = true;
 
     public InfoAdapter() {
         infoList = new ArrayList<Info>();
-
-        for (int i = 0; i < 15; i++) {
-            //infoList.add(new Info("police: ", "911"));
-        }
 
     }
 
@@ -34,6 +33,16 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ViewHolder> {
     public InfoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View infoRow = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.info_row, parent, false);
+
+        if (colorOne){
+            infoRow.setBackgroundColor(Color.parseColor("#ffada1"));
+            colorOne = !colorOne;
+
+        } else {
+            infoRow.setBackgroundColor(Color.parseColor("#fff2f0"));
+            colorOne = !colorOne;
+
+        }
 
         return new ViewHolder(infoRow);
     }
@@ -47,6 +56,22 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return infoList.size();
+    }
+
+    public void addCityInfo(City city){
+        if(city.getGeneralEmergency() != null){
+            infoList.add(new Info("General Emergency", city.getGeneralEmergency()));
+        }
+        if(city.getPoliceNumber() != null){
+            infoList.add(new Info("Police", city.getPoliceNumber()));
+        }
+        if(city.getAmbulanceNumber() != null){
+            infoList.add(new Info("Ambulance", city.getAmbulanceNumber()));
+        }
+        if(city.getFireNumber() != null){
+            infoList.add(new Info("Fire", city.getFireNumber()));
+        }
+
     }
 
 
