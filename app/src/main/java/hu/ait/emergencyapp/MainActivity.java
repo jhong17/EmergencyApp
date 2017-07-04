@@ -288,22 +288,25 @@ public class MainActivity extends AppCompatActivity
 
                 dialog.dismiss();
 
-                String selected = favoritesArray[which];
-                Log.d("TAG", "selected: " + selected);
+                String selectedCity = favoritesArray[which];
+                Log.d("TAG", "selected: " + selectedCity);
+
+                getTempIcon(selectedCity);
+
 
                 //favorites.add("London");
 
-                switch(which){
-                    case 0:
-                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
-                        break;
-                    case 1:
-                        Toast.makeText(MainActivity.this, "LONDON", Toast.LENGTH_LONG).show();
-                        break;
-                    case 2:
-                        Toast.makeText(MainActivity.this, "PARIS", Toast.LENGTH_LONG).show();
-                        break;
-                }
+//                switch(which){
+//                    case 0:
+//                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
+//                        break;
+//                    case 1:
+//                        Toast.makeText(MainActivity.this, "LONDON", Toast.LENGTH_LONG).show();
+//                        break;
+//                    case 2:
+//                        Toast.makeText(MainActivity.this, "PARIS", Toast.LENGTH_LONG).show();
+//                        break;
+//                }
             }
         });
         b.show();
