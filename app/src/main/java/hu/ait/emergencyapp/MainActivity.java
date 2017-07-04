@@ -136,38 +136,7 @@ public class MainActivity extends AppCompatActivity
 
         cityName = "";
 
-
-        final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
-                getReference("cities");
-
-        citiesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
-
-                    if(citySnapshot.getKey().trim().equals(cityName.toLowerCase().trim())){
-                        City city = citySnapshot.getValue(City.class);
-                        cityTitle.setText(cityName);
-                        if(city.getGeneralEmergency() != null) {
-                            contactInfo.setText("General Emergency Number: " +
-                                    city.getGeneralEmergency() + "");
-
-                        } else {
-                            contactInfo.setText("Police: " + city.getPoliceNumber() +
-                                    "\nFire: " + city.getFireNumber() +
-                                    "\nAmbulance: " + city.getAmbulanceNumber());
-                        }
-                        getTempIcon(cityName);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+        updateCityInfo();
 
         contactInfoCard.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -239,7 +208,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
 
                 //cityName = autoTV.getText().toString();
-                Log.d("TAG_HI", "selected: " + autoTV.getText().toString());
                 getTempIcon(autoTV.getText().toString());
                 //cityRecyclerAdapter.addCity(etTodo.getText().toString());
             }
@@ -274,6 +242,17 @@ public class MainActivity extends AppCompatActivity
 
                 getTempIcon(selectedCity);
 
+//                switch(which){
+//                    case 0:
+//                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
+//                        break;
+//                    case 1:
+//                        Toast.makeText(MainActivity.this, "LONDON", Toast.LENGTH_LONG).show();
+//                        break;
+//                    case 2:
+//                        Toast.makeText(MainActivity.this, "PARIS", Toast.LENGTH_LONG).show();
+//                        break;
+//                }
             }
         });
         b.show();
@@ -401,20 +380,33 @@ public class MainActivity extends AppCompatActivity
                     location.getLongitude(), illegalArgumentException);
         }
 
+        updateCityInfo();
 
+
+    }
+
+    private void updateCityInfo() {
 
         final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
-                getReference("cities"); 
+                getReference("cities");
 
         citiesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot citySnapshot : dataSnapshot.getChildren()){
+
                     if(citySnapshot.getKey().trim().equals(cityName.toLowerCase().trim())){
                         City city = citySnapshot.getValue(City.class);
-                        cityTitle.setText(cityName.trim());
-                        contactInfo.setText("Fire service: " + city.getFireNumber() +
-                                "\nPolice: " + city.getPoliceNumber());
+                        cityTitle.setText(cityName);
+                        if(city.getGeneralEmergency() != null) {
+                            contactInfo.setText("General Emergency Number: " +
+                                    city.getGeneralEmergency() + "");
+
+                        } else {
+                            contactInfo.setText("Police: " + city.getPoliceNumber() +
+                                    "\nFire: " + city.getFireNumber() +
+                                    "\nAmbulance: " + city.getAmbulanceNumber());
+                        }
                         getTempIcon(cityName);
                     }
                 }
@@ -426,8 +418,6 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-
-
     }
 
     @Override
