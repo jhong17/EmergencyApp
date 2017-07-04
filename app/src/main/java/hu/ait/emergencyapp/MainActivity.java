@@ -114,15 +114,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -143,17 +134,7 @@ public class MainActivity extends AppCompatActivity
         newsAdapter = new NewsAdapter();
         newsRecycler.setAdapter(newsAdapter);
 
-        cityName = "London";
-
-//        City city = new City("Budapest", "107", "105");
-//
-//        String key = FirebaseDatabase.getInstance().getReference().
-//                child("cities").push().getKey();
-//
-//        FirebaseDatabase.getInstance().getReference().
-//                child("cities").child("budapest").setValue(city);
-
-        //random comment
+        cityName = "";
 
 
         final DatabaseReference citiesRef = FirebaseDatabase.getInstance().
@@ -192,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent infoActivity = new Intent(MainActivity.this, InfoActivity.class);
-                infoActivity.putExtra(KEY_CITY_NAME, cityName);
+                infoActivity.putExtra(KEY_CITY_NAME, cityName.trim());
                 startActivity(infoActivity);
             }
         });
@@ -418,7 +399,7 @@ public class MainActivity extends AppCompatActivity
                     location.getLatitude(),
                     location.getLongitude(),
                     1);
-            cityName = addressList.get(0).getAddressLine(0) + "\n";
+            cityName = addressList.get(0).getLocality();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -444,6 +425,7 @@ public class MainActivity extends AppCompatActivity
                         cityTitle.setText(cityName.trim());
                         contactInfo.setText("Fire service: " + city.getFireNumber() +
                                 "\nPolice: " + city.getPoliceNumber());
+                        getTempIcon(cityName);
                     }
                 }
 
