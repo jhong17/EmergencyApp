@@ -158,8 +158,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
     }
 
     private void requestNeededPermission() {
@@ -307,8 +305,10 @@ public class MainActivity extends AppCompatActivity
                 favorites.remove(cityName);
 
             }
+            addFavorites();
             return true;
         }
+        addFavorites();
         return super.onOptionsItemSelected(item);
     }
 
