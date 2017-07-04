@@ -6,14 +6,13 @@ package hu.ait.emergencyapp.data;
 
 public class City  {
 
-    //primary information
     private String name;
     private String policeNumber;
     private String fireNumber;
     private String ambulanceNumber;
     private String generalEmergency;
 
-    //secondary information
+
 
     public City() {
     }

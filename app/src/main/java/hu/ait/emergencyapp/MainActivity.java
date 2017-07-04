@@ -194,18 +194,16 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose a City");
 
-        //final EditText etTodo = new EditText(this);
         final AutoCompleteTextView autoTV = new AutoCompleteTextView(this);
 
         ArrayAdapter<String> cityAdapter =
-                new ArrayAdapter<String>(this,
+                new ArrayAdapter<>(this,
                         android.R.layout.
                                 simple_dropdown_item_1line, cityNames);
         autoTV.setAdapter(cityAdapter);
 
         builder.setView(autoTV);
 
-        //rando
 
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -250,17 +248,6 @@ public class MainActivity extends AppCompatActivity
                 cityName = selectedCity;
                 updateCityInfo();
 
-//                switch(which){
-//                    case 0:
-//                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
-//                        break;
-//                    case 1:
-//                        Toast.makeText(MainActivity.this, "LONDON", Toast.LENGTH_LONG).show();
-//                        break;
-//                    case 2:
-//                        Toast.makeText(MainActivity.this, "PARIS", Toast.LENGTH_LONG).show();
-//                        break;
-//                }
             }
         });
         b.show();
@@ -278,8 +265,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
@@ -295,31 +281,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.fav) {
 
             if (item.getIcon().getConstantState().equals(
                     getResources().getDrawable(R.drawable.not_fave).getConstantState()
             )) {
 
-                //favorite stuff
                 item.setIcon(R.drawable.fave);
                 favorites.add(cityName);
-                //invalidateOptionsMenu();
 
             } else if (item.getIcon().getConstantState().equals(
                     getResources().getDrawable(R.drawable.fave).getConstantState()
             )) {
 
-                //unfavorite stuff
                 item.setIcon(R.drawable.not_fave);
                 favorites.remove(cityName);
-                //invalidateOptionsMenu();
+
             }
             return true;
         }
@@ -329,7 +309,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.home) {
@@ -381,7 +361,6 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
             Log.d("TAG_",
                     "Latitude = " + location.getLatitude() +
                     ", Longitude = " +

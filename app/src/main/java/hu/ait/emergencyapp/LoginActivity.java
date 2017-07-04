@@ -60,10 +60,6 @@ public class LoginActivity extends AppCompatActivity {
                     intentMainActivity.setClass(LoginActivity.this, MainActivity.class);
                     startActivity(intentMainActivity);
 
-                } else {
-
-//                    Toast.makeText(LoginActivity.this, "Not success: "+
-//                            task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -80,10 +76,6 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.btnSignUp)
     public void signUpClick() {
 
-        //stupid change for commit
-        int asdkjands = 0;
-        int asasd = 0;
-
         if (!isFormValid()) {
             return;
         }
@@ -98,15 +90,10 @@ public class LoginActivity extends AppCompatActivity {
                 hideProgressDialog();
 
                 if (task.isSuccessful()) {
-                    //Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
-
                     FirebaseUser fireBaseUser = task.getResult().getUser();
 
                     fireBaseUser.updateProfile(new UserProfileChangeRequest.Builder().
                             setDisplayName(getUserNameFromEmail(fireBaseUser.getEmail())).build());
-                } else {
-//                    Toast.makeText(LoginActivity.this, "Not successs: "+
-//                            task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(this, new OnFailureListener() {
