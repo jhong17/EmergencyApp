@@ -258,6 +258,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
 
                 //cityName = autoTV.getText().toString();
+                Log.d("TAG_HI", "selected: " + autoTV.getText().toString());
                 getTempIcon(autoTV.getText().toString());
                 //cityRecyclerAdapter.addCity(etTodo.getText().toString());
             }
@@ -292,17 +293,6 @@ public class MainActivity extends AppCompatActivity
 
                 getTempIcon(selectedCity);
 
-//                switch(which){
-//                    case 0:
-//                        Toast.makeText(MainActivity.this, "BUDAPEST", Toast.LENGTH_LONG).show();
-//                        break;
-//                    case 1:
-//                        Toast.makeText(MainActivity.this, "LONDON", Toast.LENGTH_LONG).show();
-//                        break;
-//                    case 2:
-//                        Toast.makeText(MainActivity.this, "PARIS", Toast.LENGTH_LONG).show();
-//                        break;
-//                }
             }
         });
         b.show();
