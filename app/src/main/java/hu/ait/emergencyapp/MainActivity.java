@@ -210,6 +210,8 @@ public class MainActivity extends AppCompatActivity
                 //cityName = autoTV.getText().toString();
                 getTempIcon(autoTV.getText().toString());
                 //cityRecyclerAdapter.addCity(etTodo.getText().toString());
+                cityName = autoTV.getText().toString();
+                updateCityInfo();
             }
         });
 
@@ -241,6 +243,8 @@ public class MainActivity extends AppCompatActivity
                 Log.d("TAG_HI", "selected: " + selectedCity);
 
                 getTempIcon(selectedCity);
+                cityName = selectedCity;
+                updateCityInfo();
 
 //                switch(which){
 //                    case 0:
@@ -285,7 +289,6 @@ public class MainActivity extends AppCompatActivity
 //        if (item != null) {
 //            item.setIcon(R.drawable.fave);
 //        }
-
         return true;
     }
 
@@ -305,6 +308,7 @@ public class MainActivity extends AppCompatActivity
 
                 item.setIcon(R.drawable.fave);
                 favorites.add(cityName);
+                //invalidateOptionsMenu();
 
             } else if (item.getIcon().getConstantState().equals(
                     getResources().getDrawable(R.drawable.fave).getConstantState()
@@ -312,6 +316,7 @@ public class MainActivity extends AppCompatActivity
 
                 item.setIcon(R.drawable.not_fave);
                 favorites.remove(cityName);
+                //invalidateOptionsMenu();
             }
             return true;
         }
@@ -418,6 +423,7 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+        invalidateOptionsMenu();
     }
 
     @Override

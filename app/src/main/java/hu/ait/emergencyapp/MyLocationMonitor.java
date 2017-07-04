@@ -31,12 +31,10 @@ public class MyLocationMonitor implements LocationListener{
 
     public void startLocationMonitoring() throws SecurityException {
         locMan = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3600000, 0, this);
 
         //if using emulator, don't use this - WILL CRASH
-        locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-
-
+        locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3600000, 0, this);
     }
 
     public void stopLocationMonitoring(){
